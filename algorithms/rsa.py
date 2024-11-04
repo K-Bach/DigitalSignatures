@@ -1,23 +1,24 @@
 import time
 from Crypto.PublicKey import RSA
-from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA1
 from sympy import isprime
 
-def sign(input, key):
+def sign(input, d, n):
     print("# Signing...")
     digest = int(SHA1.new(str.encode(input)).hexdigest(), 16)
     print("digest: ", digest)
-    signature = pow(digest, key.d, key.n)
+    signature = pow(digest, d, n)
     print("signature: ", signature)
+    
     return signature
 
-def verify(input, signature, key):
+def verify(input, signature, e, n):
     print("# Verifying...")
     digest = int(SHA1.new(str.encode(input)).hexdigest(), 16)
     print("digest: ", digest)
-    plainText = pow(signature, key.e, key.n)
+    plainText = pow(signature, e, n)
     print("plainText: ", plainText)
+    
     return plainText == digest
 
 def rsa_metrics(input):
@@ -33,14 +34,14 @@ def rsa_metrics(input):
     # Signing
     startTime = time.time()
     
-    signature = sign(input, key)
+    signature = sign(input, key.d, key.n)
     
     endTime = time.time()
     timeTaken = endTime - startTime
     signatureLength = len(signature.to_bytes((signature.bit_length() + 7) // 8))
     
     # Verification
-    verified = verify(input, signature, key)
+    verified = verify(input, signature, key.e, key.n)
     if verified:
         print("# Signature is valid")
     else:

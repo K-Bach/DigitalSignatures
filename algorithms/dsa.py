@@ -4,30 +4,30 @@ from Crypto.Hash import SHA1
 from sympy import isprime
 import random
 
-def sign(input, key):
+def sign(input, q, g, p, x):
     print("# Signing...")
     
     digest = SHA1.new(str.encode(input)).digest()
-    k = random.randint(1, key.q - 1)
-    r = pow(key.g, k, key.p) % key.q
-    s = (pow(k, -1, key.q) * ((int.from_bytes(digest) % key.q) + key.x * r)) % key.q
+    k = random.randint(1, q - 1)
+    r = pow(g, k, p) % q
+    s = (pow(k, -1, q) * ((int.from_bytes(digest) % q) + x * r)) % q
 
     while r == 0 or s == 0:
-        k = random.randint(1, key.q - 1)
-        r = pow(key.g, k, key.p) % key.q
-        s = (pow(k, -1, key.q) * ((int.from_bytes(digest) % key.q) + key.x * r)) % key.q
+        k = random.randint(1, q - 1)
+        r = pow(g, k, p) % q
+        s = (pow(k, -1, q) * ((int.from_bytes(digest) % q) + x * r)) % q
     print("r: ", r)
     
     return s, r
 
-def verify(input, s, r, key):
+def verify(input, s, r, q, g, p, y):
     print("# Verifying...")
     
-    w = pow(s, -1, key.q)
+    w = pow(s, -1, q)
     digest = SHA1.new(str.encode(input)).digest()
-    u1 = (int.from_bytes(digest) * w) % key.q
-    u2 = (r * w) % key.q
-    v = (pow(key.g, u1, key.p) * pow(key.y, u2, key.p)) % key.p % key.q
+    u1 = (int.from_bytes(digest) * w) % q
+    u2 = (r * w) % q
+    v = (pow(g, u1, p) * pow(y, u2, p)) % p % q
     print("v: ", v)
     
     return v == r
@@ -56,7 +56,7 @@ def dsa_metrics(input):
     #Signing (r,s)
     start_time = time.time()
 
-    s, r = sign(input, key)
+    s, r = sign(input, key.q, key.g, key.p, key.x)
 
     end_time = time.time()
     time_taken = end_time - start_time
@@ -64,7 +64,7 @@ def dsa_metrics(input):
     # computational_cost = 
 
     #Verification
-    verified = verify(input, s, r, key)
+    verified = verify(input, s, r, key.q, key.g, key.p, key.y)
 
     if verified:
         print("# Signature is valid")
