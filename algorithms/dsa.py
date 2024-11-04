@@ -42,17 +42,6 @@ def dsa_metrics(input):
     assert isprime(key.p) is True
     assert isprime(key.q) is True
 
-    # h = random.randint(2, p - 2)
-    # g = pow(h, (p - 1) // q, p)
-
-    # while g == 1:
-    #     h = random.randint(2, p - 2)
-    #     g = pow(h, (p - 1) // q, p)
-        
-    # # Generate key pair (x,y)
-    # x = random.randint(1, q - 1) # private key
-    # y = pow(g, x, p) # public key
-
     #Signing (r,s)
     start_time = time.perf_counter()
 
@@ -61,7 +50,6 @@ def dsa_metrics(input):
     end_time = time.perf_counter()
     time_taken = end_time - start_time
     signature_length = len(r.to_bytes((r.bit_length() + 7) // 8)) + len(s.to_bytes((s.bit_length() + 7) // 8))
-    # computational_cost = 
 
     #Verification
     verified = verify(input, s, r, key.q, key.g, key.p, key.y)
@@ -73,4 +61,3 @@ def dsa_metrics(input):
         
     print(f"Signature length: {signature_length} bytes")
     print(f"Time taken to generate the signature: {time_taken} seconds")
-    # print(f"Computational cost: {computational_cost} operations")
