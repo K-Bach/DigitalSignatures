@@ -49,7 +49,9 @@ def dsa_metrics(input):
 
     end_time = time.perf_counter()
     time_taken = end_time - start_time
-    signature_length = len(r.to_bytes((r.bit_length() + 7) // 8)) + len(s.to_bytes((s.bit_length() + 7) // 8))
+    rBytes = r.to_bytes((r.bit_length() + 7) // 8)
+    sBytes = s.to_bytes((s.bit_length() + 7) // 8)
+    signature_length = len(rBytes) + len(sBytes)
 
     #Verification
     verified = verify(input, s, r, key.q, key.g, key.p, key.y)

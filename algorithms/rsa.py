@@ -36,7 +36,8 @@ def rsa_metrics(input):
     
     endTime = time.perf_counter()
     timeTaken = endTime - startTime
-    signatureLength = len(signature.to_bytes((signature.bit_length() + 7) // 8))
+    signatureBytes = signature.to_bytes((signature.bit_length() + 7) // 8)
+    signatureLength = len(signatureBytes)
     
     # Verification
     verified = verify(input, signature, key.e, key.n)
