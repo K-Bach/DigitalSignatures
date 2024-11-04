@@ -8,14 +8,12 @@ def sign(input, d, n):
     digest = int(SHA1.new(str.encode(input)).hexdigest(), 16)
     print("digest: ", digest)
     signature = pow(digest, d, n)
-    print("signature: ", signature)
     
     return signature
 
 def verify(input, signature, e, n):
     print("# Verifying...")
     digest = int(SHA1.new(str.encode(input)).hexdigest(), 16)
-    print("digest: ", digest)
     plainText = pow(signature, e, n)
     print("plainText: ", plainText)
     
@@ -32,11 +30,11 @@ def rsa_metrics(input):
     assert isprime(key.q) is True
     
     # Signing
-    startTime = time.time()
+    startTime = time.perf_counter()
     
     signature = sign(input, key.d, key.n)
     
-    endTime = time.time()
+    endTime = time.perf_counter()
     timeTaken = endTime - startTime
     signatureLength = len(signature.to_bytes((signature.bit_length() + 7) // 8))
     

@@ -54,11 +54,11 @@ def dsa_metrics(input):
     # y = pow(g, x, p) # public key
 
     #Signing (r,s)
-    start_time = time.time()
+    start_time = time.perf_counter()
 
     s, r = sign(input, key.q, key.g, key.p, key.x)
 
-    end_time = time.time()
+    end_time = time.perf_counter()
     time_taken = end_time - start_time
     signature_length = len(r.to_bytes((r.bit_length() + 7) // 8)) + len(s.to_bytes((s.bit_length() + 7) // 8))
     # computational_cost = 
