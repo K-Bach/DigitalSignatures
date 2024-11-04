@@ -1,11 +1,11 @@
 import time
 from Crypto.PublicKey import RSA
-from Crypto.Hash import SHA1
+from Crypto.Hash import SHA256
 from sympy import isprime
 
 def sign(input, d, n):
     print("# Signing...")
-    digest = int(SHA1.new(str.encode(input)).hexdigest(), 16)
+    digest = int(SHA256.new(str.encode(input)).hexdigest(), 16)
     print("digest: ", digest)
     signature = pow(digest, d, n)
     
@@ -13,7 +13,7 @@ def sign(input, d, n):
 
 def verify(input, signature, e, n):
     print("# Verifying...")
-    digest = int(SHA1.new(str.encode(input)).hexdigest(), 16)
+    digest = int(SHA256.new(str.encode(input)).hexdigest(), 16)
     plainText = pow(signature, e, n)
     print("plainText: ", plainText)
     
@@ -25,7 +25,7 @@ def rsa_metrics(input):
     # Generate parameters (p,q,n,e,d,phi)
     # p,q,phi,d are private
     print("# Generating parameters...")
-    key = RSA.generate(3072) # 3072 is the key size
+    key = RSA.generate(2048) # 2048 is the key size
     assert isprime(key.p) is True
     assert isprime(key.q) is True
     

@@ -1,13 +1,13 @@
 import time
 from Crypto.PublicKey import DSA
-from Crypto.Hash import SHA1
+from Crypto.Hash import SHA256
 from sympy import isprime
 import random
 
 def sign(input, q, g, p, x):
     print("# Signing...")
     
-    digest = SHA1.new(str.encode(input)).digest()
+    digest = SHA256.new(str.encode(input)).digest()
     k = random.randint(1, q - 1)
     r = pow(g, k, p) % q
     s = (pow(k, -1, q) * ((int.from_bytes(digest) % q) + x * r)) % q
@@ -24,7 +24,7 @@ def verify(input, s, r, q, g, p, y):
     print("# Verifying...")
     
     w = pow(s, -1, q)
-    digest = SHA1.new(str.encode(input)).digest()
+    digest = SHA256.new(str.encode(input)).digest()
     u1 = (int.from_bytes(digest) * w) % q
     u2 = (r * w) % q
     v = (pow(g, u1, p) * pow(y, u2, p)) % p % q
@@ -37,7 +37,7 @@ def dsa_metrics(input):
     
     # Generate public parameters (p,q,g)
     print("# Generating parameters...")
-    key = DSA.generate(3072) # 3072 is the key size
+    key = DSA.generate(2048) # 2048 is the key size
 
     assert isprime(key.p) is True
     assert isprime(key.q) is True

@@ -1,6 +1,6 @@
 import time
 from ecdsa import SigningKey, NIST256p
-from Crypto.Hash import SHA1
+from Crypto.Hash import SHA256
 
 def ecdsa_metrics(input):
     print("\n### ECDSA ###")
@@ -14,7 +14,7 @@ def ecdsa_metrics(input):
     print("# Signing...")
     startTime = time.perf_counter()
     
-    digest = SHA1.new(str.encode(input)).digest()
+    digest = SHA256.new(str.encode(input)).digest()
     sig = key.sign_digest(digest)
     
     endTime = time.perf_counter()
